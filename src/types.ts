@@ -76,6 +76,7 @@ export interface KBarProviderProps {
 
 export interface KBarState {
   searchQuery: string;
+  argv: string[];
   visualState: VisualState;
   actions: ActionTree;
   currentRootActionId?: ActionId | null;

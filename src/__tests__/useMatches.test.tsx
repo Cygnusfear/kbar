@@ -48,11 +48,11 @@ function Results() {
 }
 
 function BasicComponent() {
-  const action1 = createAction({ name: "Action 1" });
-  const action2 = createAction({ name: "Action 2" });
-  const action3 = createAction({ name: "Action 3" });
+  const action1 = createAction({ name: "Action1" });
+  const action2 = createAction({ name: "Action2" });
+  const action3 = createAction({ name: "Action3" });
   const childAction1 = createAction({
-    name: "Child Action 1",
+    name: "ChildAction1",
     parent: action1.id,
   });
 
@@ -65,11 +65,11 @@ function BasicComponent() {
 }
 
 function WithPriorityComponent() {
-  const action1 = createAction({ name: "Action 1", priority: Priority.LOW });
-  const action2 = createAction({ name: "Action 2", priority: Priority.HIGH });
-  const action3 = createAction({ name: "Action 3", priority: Priority.HIGH });
+  const action1 = createAction({ name: "Action1", priority: Priority.LOW });
+  const action2 = createAction({ name: "Action2", priority: Priority.HIGH });
+  const action3 = createAction({ name: "Action3", priority: Priority.HIGH });
   const action4 = createAction({
-    name: "Action 4",
+    name: "Action4",
     priority: Priority.HIGH,
     section: {
       name: "Section 1",
@@ -77,7 +77,7 @@ function WithPriorityComponent() {
     },
   });
   const childAction1 = createAction({
-    name: "Child Action 1",
+    name: "ChildAction1",
     parent: action1.id,
   });
 
@@ -110,9 +110,9 @@ describe("useMatches", () => {
     it("returns root results with an empty search query", () => {
       const results = utils.getAllByText(/Action/i);
       expect(results.length).toEqual(3);
-      expect(results[0].textContent).toEqual("Action 1");
-      expect(results[1].textContent).toEqual("Action 2");
-      expect(results[2].textContent).toEqual("Action 3");
+      expect(results[0].textContent).toEqual("Action1");
+      expect(results[1].textContent).toEqual("Action2");
+      expect(results[2].textContent).toEqual("Action3");
     });
 
     it("returns nested results when search query is present", () => {
@@ -120,8 +120,17 @@ describe("useMatches", () => {
       fireEvent.change(input, { target: { value: "1" } });
       const results = utils.getAllByText(/Action/i);
       expect(results.length).toEqual(2);
-      expect(results[0].textContent).toEqual("Action 1");
-      expect(results[1].textContent).toEqual("Child Action 1");
+      expect(results[0].textContent).toEqual("Action1");
+      expect(results[1].textContent).toEqual("ChildAction1");
+    });
+
+    it("returns results when search has additional arguments", () => {
+      const { input } = utils;
+      fireEvent.change(input, { target: { value: "Action1 someParameter --test" } });
+      const results = utils.getAllByText(/Action/i);
+      expect(results.length).toEqual(2);
+      expect(results[0].textContent).toEqual("Action1");
+      expect(results[1].textContent).toEqual("ChildAction1");
     });
   });
 
@@ -135,10 +144,10 @@ describe("useMatches", () => {
       const results = utils.getAllByText(/Action/i);
       expect(results.length).toEqual(4);
 
-      expect(results[0].textContent).toEqual("Action 4");
-      expect(results[1].textContent).toEqual("Action 2");
-      expect(results[2].textContent).toEqual("Action 3");
-      expect(results[3].textContent).toEqual("Action 1");
+      expect(results[0].textContent).toEqual("Action4");
+      expect(results[1].textContent).toEqual("Action2");
+      expect(results[2].textContent).toEqual("Action3");
+      expect(results[3].textContent).toEqual("Action1");
 
       expect(utils.queryAllByText(/Section 1/i));
     });

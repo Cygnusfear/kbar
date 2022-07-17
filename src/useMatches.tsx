@@ -74,7 +74,7 @@ export function useMatches() {
     return getDeepResults(rootResults);
   }, [getDeepResults, rootResults, emptySearch]);
 
-  const matches = useInternalMatches(filtered, search);
+  let matches = useInternalMatches(filtered, search.split(' ')[0]);
 
   const results = React.useMemo(() => {
     /**
